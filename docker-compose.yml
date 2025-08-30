@@ -13,6 +13,50 @@ services:
     networks:
       - postgres
     restart: unless-stopped
+  eureka-server:
+    image: ayoub1411/discovery:latest   # Your Eureka server image
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - postgres
+    environment:
+      - EUREKA_INSTANCE_HOSTNAME=eureka-server
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+  students-service:
+    image: ayoub1411/student:latest
+    container_name: students-service
+    depends_on:
+      - eureka-server
+      - postgresql
+    ports:
+      - "8060:8081"
+    networks:
+      - postgres
+    environment:
+      EUREKA_HOSTNAME: eureka-server
+      EUREKA_URL: http://eureka-server:8761/eureka
+      DB_URL: jdbc:postgresql://postgresql:5432/students
+      DB_USERNAME: alibou
+      DB_PASSWORD: alibou
+      SERVER_PORT: 8081
+  schools-service:
+    image: ayoub1411/school:latest
+    container_name: schools-service
+    depends_on:
+      - eureka-server
+      - postgresql
+    ports:
+      - "8050:8080"
+    networks:
+      - postgres
+    environment:
+      EUREKA_HOSTNAME: eureka-server
+      EUREKA_URL: http://eureka-server:8761/eureka
+      DB_URL: jdbc:postgresql://postgresql:5432/schools
+      DB_USERNAME: alibou
+      DB_PASSWORD: alibou
+      SERVER_PORT: 8080
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
@@ -27,13 +71,7 @@ services:
     networks:
       - postgres
     restart: unless-stopped
-  zipkin:
-    container_name: zipkin
-    image: openzipkin/zipkin
-    ports:
-      - "9411:9411"
-    networks:
-      - zipkin
+
 
 networks:
   postgres:

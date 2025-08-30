@@ -33,6 +33,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./${{ matrix.service }}
-          file: ./services/${{ matrix.service }}/Dockerfile
+          file: ./${{ matrix.service }}/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:latest

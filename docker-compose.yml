@@ -14,7 +14,7 @@ services:
       - postgres
     restart: unless-stopped
   eureka-server:
-    image: ayoub1411/discovery:latest   # Your Eureka server image
+    image: ayoub1411/discovery-beta:latest   # Your Eureka server image
     container_name: eureka-server
     ports:
       - "8761:8761"
@@ -24,7 +24,7 @@ services:
       - EUREKA_INSTANCE_HOSTNAME=eureka-server
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
   students-service:
-    image: ayoub1411/student:latest
+    image: ayoub1411/student-beta:latest
     container_name: students-service
     depends_on:
       - eureka-server
@@ -41,7 +41,7 @@ services:
       DB_PASSWORD: alibou
       SERVER_PORT: 8081
   schools-service:
-    image: ayoub1411/school:latest
+    image: ayoub1411/school-beta:latest
     container_name: schools-service
     depends_on:
       - eureka-server

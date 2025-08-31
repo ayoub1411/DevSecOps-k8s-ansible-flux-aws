@@ -10,7 +10,7 @@ server:
   port: ${SERVER_PORT:8080}
 spring:
   application:
-    name: schools-service
+    name: students-service
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${DB_URL}
